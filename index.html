@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Video Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        video {
+            width: 80%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Random Video Player</h1>
+    <video id="videoPlayer" controls autoplay></video>
+    <div>
+        <button onclick="loadCategory('nym1.txt')">NYM</button>
+        <button onclick="loadCategory('tra.txt')">TRA</button>
+        <button onclick="loadCategory('aa.txt')">AA</button>
+        <button onclick="loadCategory('ao.txt')">AO</button>
+        <button onclick="loadCategory('swa.txt')">SWA</button>
+        <button onclick="resetCategory()">Reset</button>
+    </div>
+
+    <script>
+        let currentCategory = [];
+
+        function loadCategory(fileName) {
+            fetch(fileName)
+                .then(response => response.text())
+                .then(text => {
+                    // Split the text by semicolon and trim whitespace
+                    currentCategory = text.split(";").map(url => url.trim()).filter(url => url);
+                    playRandomVideo();
+                });
+        }
+
+        function playRandomVideo() {
+            if (currentCategory.length > 0) {
+                const randomIndex = Math.floor(Math.random() * currentCategory.length);
+                document.getElementById("videoPlayer").src = currentCategory[randomIndex];
+            } else {
+                console.log("No videos available in the current category.");
+            }
+        }
+
+        function resetCategory() {
+            currentCategory = []; // Reset category
+            document.getElementById("videoPlayer").src = ""; // Stop video playback
+        }
+
+        // Optionally auto-load a default category
+        // loadCategory('nym.txt');
+    </script>
+
+</body>
+</html>
